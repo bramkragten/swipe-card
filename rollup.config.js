@@ -6,7 +6,7 @@ import { terser } from "rollup-plugin-terser";
 export default {
   input: "src/index.js",
   output: {
-    file: "swipe-card.js",
+    file: "dist/swipe-card.js",
     format: "umd",
     name: "SwipeCard"
   },
