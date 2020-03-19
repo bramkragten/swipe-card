@@ -48,10 +48,12 @@ class SwipeCard extends LitElement {
     }
     this._config = deepcopy(config);
     this._parameters = this._config.parameters || {};
-    this._cards = this._config.cards.map(async card => {
-      const element = await this._createCardElement(card);
-      return element;
-    });
+    this._cards = [];
+    this._config.cards.forEach(config =>
+      this._createCardElement(config).then(card => {
+        this._cards.push(card);
+      })
+    );
   }
 
   set hass(hass) {
@@ -86,7 +88,7 @@ class SwipeCard extends LitElement {
   }
 
   render() {
-    if (!this._config || !this._hass) {
+    if (!this._config || !this._hass || !this._cards) {
       return html``;
     }
 
@@ -230,8 +232,8 @@ class SwipeCard extends LitElement {
     return element;
   }
 
-  _rebuildCard(element, config) {
-    const newCard = this._createCardElement(config);
+  async _rebuildCard(element, config) {
+    const newCard = await this._createCardElement(config);
     element.replaceWith(newCard);
     this._cards.splice(this._cards.indexOf(element), 1, newCard);
   }
