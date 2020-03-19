@@ -1,6 +1,4 @@
-import {
-  LitElement, html, css, unsafeCSS
-} from "lit-element";
+import { LitElement, html, css, unsafeCSS } from "lit-element";
 
 import Swiper from "swiper";
 import swiperStyle from "swiper/dist/css/swiper.min.css";
@@ -8,6 +6,7 @@ import deepcopy from "deep-clone-simple";
 import { fireEvent } from "custom-card-helpers";
 
 const CUSTOM_TYPE_PREFIX = "custom:";
+const HELPERS = window.loadCardHelpers ? window.loadCardHelpers() : undefined;
 
 class SwipeCard extends LitElement {
   static get properties() {
@@ -49,8 +48,8 @@ class SwipeCard extends LitElement {
     }
     this._config = deepcopy(config);
     this._parameters = this._config.parameters || {};
-    this._cards = this._config.cards.map((card) => {
-      const element = this._createCardElement(card);
+    this._cards = this._config.cards.map(async card => {
+      const element = await this._createCardElement(card);
       return element;
     });
   }
@@ -62,7 +61,7 @@ class SwipeCard extends LitElement {
       return;
     }
 
-    this._cards.forEach((element) => {
+    this._cards.forEach(element => {
       element.hass = this._hass;
     });
   }
@@ -95,30 +94,30 @@ class SwipeCard extends LitElement {
       <div
         class="swiper-container"
         dir="${this._hass.translationMetadata.translations[
-    this._hass.selectedLanguage || this._hass.language
-  ].isRTL || false
-    ? "rtl"
-    : "ltr"}"
+          this._hass.selectedLanguage || this._hass.language
+        ].isRTL || false
+          ? "rtl"
+          : "ltr"}"
       >
         <div class="swiper-wrapper">
           ${this._cards}
         </div>
         ${"pagination" in this._parameters
-    ? html`
+          ? html`
               <div class="swiper-pagination"></div>
             `
-    : ""}
+          : ""}
         ${"navigation" in this._parameters
-    ? html`
+          ? html`
               <div class="swiper-button-next"></div>
               <div class="swiper-button-prev"></div>
             `
-    : ""}
+          : ""}
         ${"scrollbar" in this._parameters
-    ? html`
+          ? html`
               <div class="swiper-scrollbar"></div>
             `
-    : ""}
+          : ""}
       </div>
     `;
   }
@@ -132,35 +131,49 @@ class SwipeCard extends LitElement {
       if (this._parameters.pagination === null) {
         this._parameters.pagination = {};
       }
-      this._parameters.pagination.el = this.shadowRoot.querySelector(".swiper-pagination");
+      this._parameters.pagination.el = this.shadowRoot.querySelector(
+        ".swiper-pagination"
+      );
     }
 
     if ("navigation" in this._parameters) {
       if (this._parameters.navigation === null) {
         this._parameters.navigation = {};
       }
-      this._parameters.navigation.nextEl = this.shadowRoot.querySelector(".swiper-button-next");
-      this._parameters.navigation.prevEl = this.shadowRoot.querySelector(".swiper-button-prev");
+      this._parameters.navigation.nextEl = this.shadowRoot.querySelector(
+        ".swiper-button-next"
+      );
+      this._parameters.navigation.prevEl = this.shadowRoot.querySelector(
+        ".swiper-button-prev"
+      );
     }
 
     if ("scrollbar" in this._parameters) {
       if (this._parameters.scrollbar === null) {
         this._parameters.scrollbar = {};
       }
-      this._parameters.scrollbar.el = this.shadowRoot.querySelector(".swiper-scrollbar");
+      this._parameters.scrollbar.el = this.shadowRoot.querySelector(
+        ".swiper-scrollbar"
+      );
     }
 
     if ("start_card" in this._config) {
       this._parameters.initialSlide = this._config.start_card - 1;
     }
 
-    this.swiper = new Swiper(this.shadowRoot.querySelector(".swiper-container"), this._parameters);
+    this.swiper = new Swiper(
+      this.shadowRoot.querySelector(".swiper-container"),
+      this._parameters
+    );
   }
 
-  _createCardElement(cardConfig) {
+  async _createCardElement(cardConfig) {
     let element;
     let errorConfig;
-    if (cardConfig.type.startsWith(CUSTOM_TYPE_PREFIX)) {
+
+    if (HELPERS) {
+      element = (await HELPERS).createCardElement(cardConfig);
+    } else if (cardConfig.type.startsWith(CUSTOM_TYPE_PREFIX)) {
       const tag = cardConfig.type.substr(CUSTOM_TYPE_PREFIX.length);
 
       if (customElements.get(tag)) {
@@ -206,7 +219,7 @@ class SwipeCard extends LitElement {
     }
     element.addEventListener(
       "ll-rebuild",
-      (ev) => {
+      ev => {
         ev.stopPropagation();
         this._rebuildCard(element, cardConfig);
       },
