@@ -13,8 +13,20 @@ class SwipeCard extends LitElement {
     return {
       _config: {},
       _cards: {},
-      _hass: {}
+      _needsUpdate: {}
     };
+  }
+
+  shouldUpdate(changedProps) {
+    console.log(changedProps);
+    if (
+      changedProps.has("_config") ||
+      changedProps.has("_cards") ||
+      changedProps.has("_needsUpdate")
+    ) {
+      return true;
+    }
+    return false;
   }
 
   static get styles() {
@@ -52,6 +64,7 @@ class SwipeCard extends LitElement {
     this._config.cards.forEach(config =>
       this._createCardElement(config).then(card => {
         this._cards.push(card);
+        this._needsUpdate = true;
       })
     );
   }
@@ -236,6 +249,7 @@ class SwipeCard extends LitElement {
     const newCard = await this._createCardElement(config);
     element.replaceWith(newCard);
     this._cards.splice(this._cards.indexOf(element), 1, newCard);
+    this._needsUpdate = true;
   }
 
   getCardSize() {
