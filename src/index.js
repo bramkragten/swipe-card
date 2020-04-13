@@ -18,7 +18,6 @@ class SwipeCard extends LitElement {
   }
 
   shouldUpdate(changedProps) {
-    console.log(changedProps);
     if (
       changedProps.has("_config") ||
       changedProps.has("_cards") ||
