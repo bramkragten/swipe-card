@@ -12,17 +12,12 @@ class SwipeCard extends LitElement {
   static get properties() {
     return {
       _config: {},
-      _cards: {},
       _needsUpdate: {}
     };
   }
 
   shouldUpdate(changedProps) {
-    if (
-      changedProps.has("_config") ||
-      changedProps.has("_cards") ||
-      changedProps.has("_needsUpdate")
-    ) {
+    if (changedProps.has("_config") || changedProps.has("_needsUpdate")) {
       return true;
     }
     return false;
@@ -179,6 +174,9 @@ class SwipeCard extends LitElement {
       this.shadowRoot.querySelector(".swiper-container"),
       this._parameters
     );
+    window.setTimeout(() => {
+      this.swiper.update();
+    }, 1000);
   }
 
   async _createCardElement(cardConfig) {
