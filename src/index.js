@@ -177,6 +177,25 @@ class SwipeCard extends LitElement {
       this.shadowRoot.querySelector(".swiper-container"),
       this._parameters
     );
+
+    if (this._config.reset_after) {
+      const willReset = function(myself) {
+        if (myself._resetTimer) window.clearTimeout(myself._resetTimer);
+        myself._resetTimer = window.setTimeout(() => {
+          myself.swiper.slideTo(myself._parameters.initialSlide || 0);
+        }, myself._config.reset_after * 1000);
+      };
+      this.swiper
+        .on("slideChange", () => {
+          willReset(this);
+        })
+        .on("click", () => {
+          willReset(this);
+        })
+        .on("touchEnd", () => {
+          willReset(this);
+        });
+    }
   }
 
   async _createCardElement(cardConfig) {
