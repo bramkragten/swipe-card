@@ -12,9 +12,15 @@ class SwipeCard extends LitElement {
   static get properties() {
     return {
       _config: {},
-      _cards: {},
-      _hass: {}
+      _cards: {}
     };
+  }
+
+  shouldUpdate(changedProps) {
+    if (changedProps.has("_config") || changedProps.has("_cards")) {
+      return true;
+    }
+    return false;
   }
 
   static get styles() {
@@ -49,9 +55,13 @@ class SwipeCard extends LitElement {
     this._config = deepcopy(config);
     this._parameters = this._config.parameters || {};
     this._cards = [];
+    this._ro = new ResizeObserver(entries => {
+      if (this.swiper) this.swiper.update();
+    });
     this._config.cards.forEach(config =>
       this._createCardElement(config).then(card => {
-        this._cards.push(card);
+        this._cards = [...this._cards, card];
+        this._ro.observe(card);
       })
     );
   }
@@ -167,6 +177,25 @@ class SwipeCard extends LitElement {
       this.shadowRoot.querySelector(".swiper-container"),
       this._parameters
     );
+
+    if (this._config.reset_after) {
+      const willReset = function(myself) {
+        if (myself._resetTimer) window.clearTimeout(myself._resetTimer);
+        myself._resetTimer = window.setTimeout(() => {
+          myself.swiper.slideTo(myself._parameters.initialSlide || 0);
+        }, myself._config.reset_after * 1000);
+      };
+      this.swiper
+        .on("slideChange", () => {
+          willReset(this);
+        })
+        .on("click", () => {
+          willReset(this);
+        })
+        .on("touchEnd", () => {
+          willReset(this);
+        });
+    }
   }
 
   async _createCardElement(cardConfig) {
@@ -236,6 +265,8 @@ class SwipeCard extends LitElement {
     const newCard = await this._createCardElement(config);
     element.replaceWith(newCard);
     this._cards.splice(this._cards.indexOf(element), 1, newCard);
+    this._ro.observe(newCard);
+    this.swiper.update();
   }
 
   getCardSize() {
