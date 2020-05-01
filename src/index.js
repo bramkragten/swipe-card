@@ -265,7 +265,7 @@ class SwipeCard extends LitElement {
     const newCard = await this._createCardElement(config);
     element.replaceWith(newCard);
     this._cards.splice(this._cards.indexOf(element), 1, newCard);
-    this._ro(newCard);
+    this._ro.observe(newCard);
     this.swiper.update();
   }
 
