@@ -178,6 +178,8 @@ class SwipeCard extends LitElement {
       this._parameters
     );
 
+    this._setupTouch();
+
     if (this._config.reset_after) {
       const willReset = function(myself) {
         if (myself._resetTimer) window.clearTimeout(myself._resetTimer);
@@ -267,6 +269,38 @@ class SwipeCard extends LitElement {
     this._cards.splice(this._cards.indexOf(element), 1, newCard);
     this._ro.observe(newCard);
     this.swiper.update();
+  }
+
+  _setupTouch() {
+    const touchTarget = `.swiper-${this._parameters.touchEventsTarget ||
+      "container"}`;
+    const touchElement = this.shadowRoot.querySelector(touchTarget);
+
+    this._is_swiping = false;
+
+    // Re-add 'touchend' event handler in swiper using capture (instead of bubbling), so events
+    // can be stopped before reaching child elements (i.e. "cards") during touch movements.
+    // This is not supported otherwise (NB: This is a hack at best).
+    touchElement.removeEventListener("touchend", this.swiper.onTouchEnd);
+    touchElement.addEventListener("touchend", this.swiper.onTouchEnd, true);
+
+    touchElement.addEventListener(
+      "touchend",
+      ev => {
+        if (this._is_swiping) {
+          ev.stopPropagation();
+        }
+        this._is_swiping = false;
+      },
+      true
+    );
+    touchElement.addEventListener(
+      "touchmove",
+      ev => {
+        this._is_swiping = true;
+      },
+      true
+    );
   }
 
   getCardSize() {
