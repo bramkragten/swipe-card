@@ -25,7 +25,7 @@
     "eslint-config-prettier": "^6.2.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-prettier": "^3.1.2",
-    "prettier": "^1.19.1",
+    "prettier": "^2.0.5",
     "rollup": "^2.1.0",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-postcss": "^2.5.0",
@@ -35,6 +35,6 @@
     "custom-card-helpers": "^1.1.9",
     "deep-clone-simple": "^1.1.1",
     "lit-element": "^2.1.0",
-    "swiper": "^4.5.0"
+    "swiper": "^5.3.8"
   }
 }

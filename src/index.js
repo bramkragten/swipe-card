@@ -1,7 +1,7 @@
 import { LitElement, html, css, unsafeCSS } from "lit-element";
 
 import Swiper from "swiper";
-import swiperStyle from "swiper/dist/css/swiper.min.css";
+import swiperStyle from "swiper/css/swiper.min.css";
 import deepcopy from "deep-clone-simple";
 import { fireEvent } from "custom-card-helpers";
 
@@ -12,7 +12,7 @@ class SwipeCard extends LitElement {
   static get properties() {
     return {
       _config: {},
-      _cards: {}
+      _cards: {},
     };
   }
 
@@ -24,28 +24,12 @@ class SwipeCard extends LitElement {
   }
 
   static get styles() {
-    return [
-      css`
-        ${unsafeCSS(swiperStyle)}
-      `,
-      css`
-        .swiper-pagination-bullet-active {
-          background: var(--primary-color);
-        }
-        .swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
-          background: var(--primary-color);
-        }
-        .swiper-scrollbar-drag {
-          background: var(--primary-color);
-        }
-        .swiper-button-prev {
-          background-image: url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 27 44'><path d='M0,22L22,0l2.1,2.1L4.2,22l19.9,19.9L22,44L0,22L0,22L0,22z' fill='var(--primary-color)'/></svg>");
-        }
-        .swiper-button-next {
-          background-image: url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 27 44'><path d='M27,22L27,22L5,44l-2.1-2.1L22.8,22L2.9,2.1L5,0L27,22L27,22z' fill='var(--primary-color)'/></svg>");
-        }
-      `
-    ];
+    return css`
+      :host {
+        --swiper-theme-color: var(--primary-color);
+      }
+      ${unsafeCSS(swiperStyle)}
+    `;
   }
 
   setConfig(config) {
@@ -55,11 +39,11 @@ class SwipeCard extends LitElement {
     this._config = deepcopy(config);
     this._parameters = this._config.parameters || {};
     this._cards = [];
-    this._ro = new ResizeObserver(entries => {
+    this._ro = new ResizeObserver((entries) => {
       if (this.swiper) this.swiper.update();
     });
-    this._config.cards.forEach(config =>
-      this._createCardElement(config).then(card => {
+    this._config.cards.forEach((config) =>
+      this._createCardElement(config).then((card) => {
         this._cards = [...this._cards, card];
         this._ro.observe(card);
       })
@@ -73,7 +57,7 @@ class SwipeCard extends LitElement {
       return;
     }
 
-    this._cards.forEach(element => {
+    this._cards.forEach((element) => {
       element.hass = this._hass;
     });
   }
@@ -115,9 +99,7 @@ class SwipeCard extends LitElement {
           ${this._cards}
         </div>
         ${"pagination" in this._parameters
-          ? html`
-              <div class="swiper-pagination"></div>
-            `
+          ? html` <div class="swiper-pagination"></div> `
           : ""}
         ${"navigation" in this._parameters
           ? html`
@@ -126,9 +108,7 @@ class SwipeCard extends LitElement {
             `
           : ""}
         ${"scrollbar" in this._parameters
-          ? html`
-              <div class="swiper-scrollbar"></div>
-            `
+          ? html` <div class="swiper-scrollbar"></div> `
           : ""}
       </div>
     `;
@@ -178,26 +158,27 @@ class SwipeCard extends LitElement {
       this._parameters
     );
 
-    this._setupTouch();
-
     if (this._config.reset_after) {
-      const willReset = function(myself) {
-        if (myself._resetTimer) window.clearTimeout(myself._resetTimer);
-        myself._resetTimer = window.setTimeout(() => {
-          myself.swiper.slideTo(myself._parameters.initialSlide || 0);
-        }, myself._config.reset_after * 1000);
-      };
       this.swiper
         .on("slideChange", () => {
-          willReset(this);
+          this._setResetTimer();
         })
         .on("click", () => {
-          willReset(this);
+          this._setResetTimer();
         })
         .on("touchEnd", () => {
-          willReset(this);
+          this._setResetTimer();
         });
     }
+  }
+
+  _setResetTimer() {
+    if (this._resetTimer) {
+      window.clearTimeout(this._resetTimer);
+    }
+    this._resetTimer = window.setTimeout(() => {
+      this.swiper.slideTo(this._parameters.initialSlide || 0);
+    }, this._config.reset_after * 1000);
   }
 
   async _createCardElement(cardConfig) {
@@ -215,7 +196,7 @@ class SwipeCard extends LitElement {
         errorConfig = {
           type: "error",
           error: `Custom element doesn't exist: ${tag}.`,
-          cardConfig
+          cardConfig,
         };
         element = window.document.createElement("hui-error-card");
         element.style.display = "None";
@@ -252,12 +233,12 @@ class SwipeCard extends LitElement {
     }
     element.addEventListener(
       "ll-rebuild",
-      ev => {
+      (ev) => {
         ev.stopPropagation();
         this._rebuildCard(element, cardConfig);
       },
       {
-        once: true
+        once: true,
       }
     );
     return element;
@@ -271,41 +252,14 @@ class SwipeCard extends LitElement {
     this.swiper.update();
   }
 
-  _setupTouch() {
-    const touchTarget = `.swiper-${this._parameters.touchEventsTarget ||
-      "container"}`;
-    const touchElement = this.shadowRoot.querySelector(touchTarget);
-
-    this._is_swiping = false;
-
-    // Re-add 'touchend' event handler in swiper using capture (instead of bubbling), so events
-    // can be stopped before reaching child elements (i.e. "cards") during touch movements.
-    // This is not supported otherwise (NB: This is a hack at best).
-    touchElement.removeEventListener("touchend", this.swiper.onTouchEnd);
-    touchElement.addEventListener("touchend", this.swiper.onTouchEnd, true);
-
-    touchElement.addEventListener(
-      "touchend",
-      ev => {
-        if (this._is_swiping) {
-          ev.stopPropagation();
-        }
-        this._is_swiping = false;
-      },
-      true
-    );
-    touchElement.addEventListener(
-      "touchmove",
-      ev => {
-        this._is_swiping = true;
-      },
-      true
-    );
-  }
-
   getCardSize() {
     return 2;
   }
 }
 
 customElements.define("swipe-card", SwipeCard);
+console.info(
+  "%c   SWPIE-CARD  \n%c Version 3.2.3 ",
+  "color: orange; font-weight: bold; background: black",
+  "color: white; font-weight: bold; background: dimgray"
+);
