@@ -39,13 +39,19 @@ class SwipeCard extends LitElement {
     this._config = deepcopy(config);
     this._parameters = this._config.parameters || {};
     this._cards = [];
-    this._ro = new ResizeObserver((entries) => {
-      if (this.swiper) this.swiper.update();
-    });
+    if (window.ResizeObserver) {
+      this._ro = new ResizeObserver(() => {
+        if (this.swiper) {
+          this.swiper.update();
+        }
+      });
+    }
     this._config.cards.forEach((config) =>
       this._createCardElement(config).then((card) => {
         this._cards = [...this._cards, card];
-        this._ro.observe(card);
+        if (this._ro) {
+          this._ro.observe(card);
+        }
       })
     );
   }
@@ -259,7 +265,7 @@ class SwipeCard extends LitElement {
 
 customElements.define("swipe-card", SwipeCard);
 console.info(
-  "%c   SWPIE-CARD  \n%c Version 3.2.0 ",
+  "%c   SWPIE-CARD  \n%c Version 3.2.1 ",
   "color: orange; font-weight: bold; background: black",
   "color: white; font-weight: bold; background: dimgray"
 );
