@@ -265,8 +265,7 @@ class SwipeCard extends LitElement {
         typeof element.getCardSize === "function" ? element.getCardSize() : 1;
       sizes.push(size);
     });
-    var max_size = Math.max(...sizes);
-    return max_size;
+    return Math.max(...sizes, 2);
   }
 }
 
