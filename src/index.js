@@ -259,7 +259,14 @@ class SwipeCard extends LitElement {
   }
 
   getCardSize() {
-    return 2;
+    var sizes = [];
+    this._cards.forEach((element) => {
+      var size =
+        typeof element.getCardSize === "function" ? element.getCardSize() : 1;
+      sizes.push(size);
+    });
+    var max_size = Math.max.apply(Math, sizes);
+    return max_size;
   }
 }
 
