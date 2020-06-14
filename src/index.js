@@ -33,6 +33,10 @@ class SwipeCard extends LitElement {
     };
   }
 
+  static getStubConfig() {
+    return { cards: [] };
+  }
+
   shouldUpdate(changedProps) {
     if (changedProps.has("_config") || changedProps.has("_cards")) {
       return true;
