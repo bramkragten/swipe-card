@@ -3,10 +3,15 @@ import { LitElement, html, css, unsafeCSS } from "lit-element";
 import Swiper from "swiper";
 import swiperStyle from "swiper/css/swiper.min.css";
 import deepcopy from "deep-clone-simple";
-import { fireEvent } from "custom-card-helpers";
 
-const CUSTOM_TYPE_PREFIX = "custom:";
 const HELPERS = window.loadCardHelpers ? window.loadCardHelpers() : undefined;
+
+window.customCards = window.customCards || [];
+window.customCards.push({
+  type: "swipe-card",
+  name: "Swipe Card",
+  description: "A card thats lets you swipe through multiple Lovelace cards.",
+});
 
 const computeCardSize = (card) => {
   if (typeof card.getCardSize === "function") {
@@ -209,52 +214,11 @@ class SwipeCard extends LitElement {
   }
 
   async _createCardElement(cardConfig) {
-    let element;
-    let errorConfig;
-
-    if (HELPERS) {
-      element = (await HELPERS).createCardElement(cardConfig);
-    } else if (cardConfig.type.startsWith(CUSTOM_TYPE_PREFIX)) {
-      const tag = cardConfig.type.substr(CUSTOM_TYPE_PREFIX.length);
-
-      if (customElements.get(tag)) {
-        element = window.document.createElement(`${tag}`);
-      } else {
-        errorConfig = {
-          type: "error",
-          error: `Custom element doesn't exist: ${tag}.`,
-          cardConfig,
-        };
-        element = window.document.createElement("hui-error-card");
-        element.style.display = "None";
-        const timer = window.setTimeout(() => {
-          element.style.display = "";
-        }, 5000);
-
-        customElements.whenDefined(tag).then(() => {
-          clearTimeout(timer);
-          // HA >= 0.86
-          fireEvent(element, "ll-rebuild");
-          // HA < 0.86
-          fireEvent(element, "rebuild-view");
-        });
-      }
-    } else {
-      element = window.document.createElement(`hui-${cardConfig.type}-card`);
-    }
-
+    const element = (await HELPERS).createCardElement(cardConfig);
     element.className = "swiper-slide";
-
     if ("card_width" in this._config) {
       element.style.width = this._config.card_width;
     }
-
-    if (errorConfig) {
-      element.setConfig(errorConfig);
-    } else {
-      element.setConfig(cardConfig);
-    }
-
     if (this._hass) {
       element.hass = this._hass;
     }

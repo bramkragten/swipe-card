@@ -2,23 +2,24 @@ import resolve from "@rollup/plugin-node-resolve";
 import postcss from "rollup-plugin-postcss";
 import babel from "rollup-plugin-babel";
 import { terser } from "rollup-plugin-terser";
+import cleanup from "rollup-plugin-cleanup";
 
 export default {
   input: "src/index.js",
   output: {
     file: "dist/swipe-card.js",
-    format: "umd",
-    name: "SwipeCard"
+    format: "es",
   },
   plugins: [
     resolve(),
     postcss({
-      extensions: [".css"]
+      extensions: [".css"],
     }),
     babel({
       exclude: "node_modules/**",
-      babelrc: false
+      babelrc: false,
     }),
-    terser()
-  ]
+    terser(),
+    cleanup({ comments: "none" }),
+  ],
 };
