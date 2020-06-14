@@ -1,3 +1,9 @@
+## 4.0.0
+
+- Drop support for older Home Assistant versions
+- Report the correct card size
+- Bug fixes
+
 ## 3.0.0
 
 - Bundled version
