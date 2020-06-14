@@ -8,6 +8,18 @@ import { fireEvent } from "custom-card-helpers";
 const CUSTOM_TYPE_PREFIX = "custom:";
 const HELPERS = window.loadCardHelpers ? window.loadCardHelpers() : undefined;
 
+const computeCardSize = (card) => {
+  if (typeof card.getCardSize === "function") {
+    return card.getCardSize();
+  }
+  if (customElements.get(card.localName)) {
+    return 1;
+  }
+  return customElements
+    .whenDefined(card.localName)
+    .then(() => computeCardSize(card));
+};
+
 class SwipeCard extends LitElement {
   static get properties() {
     return {
@@ -36,8 +48,8 @@ class SwipeCard extends LitElement {
     if (!config || !config.cards || !Array.isArray(config.cards)) {
       throw new Error("Card config incorrect");
     }
-    this._config = deepcopy(config);
-    this._parameters = this._config.parameters || {};
+    this._config = config;
+    this._parameters = deepcopy(this._config.parameters) || {};
     this._cards = [];
     if (window.ResizeObserver) {
       this._ro = new ResizeObserver(() => {
@@ -46,14 +58,7 @@ class SwipeCard extends LitElement {
         }
       });
     }
-    this._config.cards.forEach((config) =>
-      this._createCardElement(config).then((card) => {
-        this._cards = [...this._cards, card];
-        if (this._ro) {
-          this._ro.observe(card);
-        }
-      })
-    );
+    this._createCards();
   }
 
   set hass(hass) {
@@ -88,7 +93,7 @@ class SwipeCard extends LitElement {
   }
 
   render() {
-    if (!this._config || !this._hass || !this._cards) {
+    if (!this._config || !this._hass) {
       return html``;
     }
 
@@ -187,6 +192,22 @@ class SwipeCard extends LitElement {
     }, this._config.reset_after * 1000);
   }
 
+  async _createCards() {
+    this._cardPromises = Promise.all(
+      this._config.cards.map((config) => this._createCardElement(config))
+    );
+
+    this._cards = await this._cardPromises;
+    if (this._ro) {
+      this._cards.forEach((card) => {
+        this._ro.observe(card);
+      });
+    }
+    if (this.swiper) {
+      this.swiper.update();
+    }
+  }
+
   async _createCardElement(cardConfig) {
     let element;
     let errorConfig;
@@ -258,14 +279,28 @@ class SwipeCard extends LitElement {
     this.swiper.update();
   }
 
-  getCardSize() {
-    return 2;
+  async getCardSize() {
+    await this._cardPromises;
+
+    if (!this._cards) {
+      return 0;
+    }
+
+    const promises = [];
+
+    for (const element of this._cards) {
+      promises.push(computeCardSize(element));
+    }
+
+    const results = await Promise.all(promises);
+
+    return Math.max(...results);
   }
 }
 
 customElements.define("swipe-card", SwipeCard);
 console.info(
-  "%c   SWPIE-CARD  \n%c Version 3.2.1 ",
+  "%c   SWIPE-CARD  \n%c Version 3.2.2 ",
   "color: orange; font-weight: bold; background: black",
   "color: white; font-weight: bold; background: dimgray"
 );
