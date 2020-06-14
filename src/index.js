@@ -268,7 +268,7 @@ class SwipeCard extends LitElement {
 
 customElements.define("swipe-card", SwipeCard);
 console.info(
-  "%c   SWIPE-CARD  \n%c Version 3.2.2 ",
+  "%c   SWIPE-CARD  \n%c Version 4.0.0 ",
   "color: orange; font-weight: bold; background: black",
   "color: white; font-weight: bold; background: dimgray"
 );
