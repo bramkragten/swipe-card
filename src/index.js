@@ -1,7 +1,7 @@
 import { LitElement, html, css, unsafeCSS } from "lit-element";
 
-import Swiper from "swiper";
-import swiperStyle from "swiper/css/swiper.min.css";
+import Swiper from "swiper/swiper-bundle.esm.js";
+import swiperStyle from "swiper/swiper-bundle.css";
 import deepcopy from "deep-clone-simple";
 
 const HELPERS = window.loadCardHelpers ? window.loadCardHelpers() : undefined;

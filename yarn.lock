@@ -53,6 +53,11 @@
   dependencies:
     emojis-list "^3.0.0"
 
+"@lit/reactive-element@^1.0.0-rc.2":
+  version "1.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/@lit/reactive-element/-/reactive-element-1.0.0-rc.2.tgz#f24dba16ea571a08dca70f1783bd2ca5ec8de3ee"
+  integrity sha512-cujeIl5Ei8FC7UHf4/4Q3bRJOtdTe1vpJV/JEBYCggedmQ+2P8A2oz7eE+Vxi6OJ4nc0X+KZxXnBoH4QrEbmEQ==
+
 "@rollup/plugin-node-resolve@^7.1.3":
   version "7.1.3"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-node-resolve/-/plugin-node-resolve-7.1.3.tgz#80de384edfbd7bfc9101164910f86078151a3eca"
@@ -99,6 +104,11 @@
   integrity sha512-auApPaJf3NPfe18hSoJkp8EbZzer2ISk7o8mCC3M9he/a04+gbMF97NkpD2S8riMGvm4BMRI59/SZQSaLTKpsQ==
   dependencies:
     "@types/node" "*"
+
+"@types/trusted-types@^1.0.1":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@types/trusted-types/-/trusted-types-1.0.6.tgz#569b8a08121d3203398290d602d84d73c8dcf5da"
+  integrity sha512-230RC8sFeHoT6sSUlRO6a8cAnclO06eeiq1QDfiv2FGCLWFvvERWgwIQD4FWqD9A69BN7Lzee4OXwoMVnnsWDw==
 
 acorn-jsx@^5.2.0:
   version "5.2.0"
@@ -603,10 +613,10 @@ csso@^3.5.1:
   dependencies:
     css-tree "1.0.0-alpha.29"
 
-custom-card-helpers@^1.6.4:
-  version "1.6.4"
-  resolved "https://registry.yarnpkg.com/custom-card-helpers/-/custom-card-helpers-1.6.4.tgz#d615ab72a26db5c72aaca62d39a9ac4ca37da9a9"
-  integrity sha512-9h+tUZHtxYGbV7Wiw10NQIHT/CbSnFKcfPkKOCrbHOdGjmg6dFLjIKlTbdVHx2gjbdgRsZoW6DmFmRnLB0VJlQ==
+custom-card-helpers@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/custom-card-helpers/-/custom-card-helpers-1.7.0.tgz#7b7b6d8889797f6140f64218df539b81aab681fa"
+  integrity sha512-7XybyH1HhvEO6MqoH/xRj2jpMqH1bCRi/smsOeR8KtBXOVx8ijWns7Dp33VqkH8WDR+D5pav/UI31JLVkAPnBQ==
   dependencies:
     fecha "^4.2.0"
     home-assistant-js-websocket "^5.1.0"
@@ -670,12 +680,12 @@ dom-serializer@0:
     domelementtype "^1.3.0"
     entities "^1.1.1"
 
-dom7@^2.1.5:
-  version "2.1.5"
-  resolved "https://registry.yarnpkg.com/dom7/-/dom7-2.1.5.tgz#a79411017800b31d8400070cdaebbfc92c1f6377"
-  integrity sha512-xnhwVgyOh3eD++/XGtH+5qBwYTgCm0aW91GFgPJ3XG+jlsRLyJivnbP0QmUBFhI+Oaz9FV0s7cxgXHezwOEBYA==
+dom7@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/dom7/-/dom7-3.0.0.tgz#b861ce5d67a6becd7aaa3ad02942ff14b1240331"
+  integrity sha512-oNlcUdHsC4zb7Msx7JN3K0Nro1dzJ48knvBOnDPKJ2GV9wl1i5vydJZUSyOfrkKFDZEud/jBsTk92S/VGSAe/g==
   dependencies:
-    ssr-window "^2.0.0"
+    ssr-window "^3.0.0-alpha.1"
 
 domelementtype@1, domelementtype@^1.3.0:
   version "1.3.1"
@@ -1490,10 +1500,25 @@ lit-element@^2.3.1:
   dependencies:
     lit-html "^1.1.1"
 
+lit-element@next-major:
+  version "3.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/lit-element/-/lit-element-3.0.0-rc.2.tgz#883d0b6fd7b846226d360699d1b713da5fc7e1b7"
+  integrity sha512-2Z7DabJ3b5K+p5073vFjMODoaWqy5PIaI4y6ADKm+fCGc8OnX9fU9dMoUEBZjFpd/bEFR9PBp050tUtBnT9XTQ==
+  dependencies:
+    "@lit/reactive-element" "^1.0.0-rc.2"
+    lit-html "^2.0.0-rc.3"
+
 lit-html@^1.1.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/lit-html/-/lit-html-1.2.1.tgz#1fb933dc1e2ddc095f60b8086277d4fcd9d62cc8"
   integrity sha512-GSJHHXMGLZDzTRq59IUfL9FCdAlGfqNp/dEa7k7aBaaWD+JKaCjsAk9KYm2V12ItonVaYx2dprN66Zdm1AuBTQ==
+
+lit-html@^2.0.0-rc.3:
+  version "2.0.0-rc.3"
+  resolved "https://registry.yarnpkg.com/lit-html/-/lit-html-2.0.0-rc.3.tgz#1c216e548630e18d3093d97f4e29563abce659af"
+  integrity sha512-Y6P8LlAyQuqvzq6l/Nc4z5/P5M/rVLYKQIRxcNwSuGajK0g4kbcBFQqZmgvqKG+ak+dHZjfm2HUw9TF5N/pkCw==
+  dependencies:
+    "@types/trusted-types" "^1.0.1"
 
 load-json-file@^2.0.0:
   version "2.0.0"
@@ -2531,10 +2556,10 @@ sprintf-js@~1.0.2:
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
   integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
 
-ssr-window@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/ssr-window/-/ssr-window-2.0.0.tgz#98c301aef99523317f8d69618f0010791096efc4"
-  integrity sha512-NXzN+/HPObKAx191H3zKlYomE5WrVIkoCB5IaSdvKokxTpjBdWfr0RaP+1Z5KOfDT0ZVz+2tdtiBkhsEQ9p+0A==
+ssr-window@^3.0.0, ssr-window@^3.0.0-alpha.1:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/ssr-window/-/ssr-window-3.0.0.tgz#fd5b82801638943e0cc704c4691801435af7ac37"
+  integrity sha512-q+8UfWDg9Itrg0yWK7oe5p/XRCJpJF9OBtXfOPgSJl+u3Xd5KI328RUEvUqSMVM9CiQUEf1QdBzJMkYGErj9QA==
 
 stable@^0.1.8:
   version "0.1.8"
@@ -2686,13 +2711,13 @@ svgo@^1.0.0:
     unquote "~1.1.1"
     util.promisify "~1.0.0"
 
-swiper@^5.4.3:
-  version "5.4.3"
-  resolved "https://registry.yarnpkg.com/swiper/-/swiper-5.4.3.tgz#f121c255c9aacd8cd723edbea11f44dd9cb2a404"
-  integrity sha512-Mj3nboCznDmD1CH1BHMsli/h+B9E2hZdCE8mdWize2ua97rWRb4nwWfMWzsG8CmYBCGZAGa6bLGAvL04Gq7RjQ==
+swiper@^6.5.9:
+  version "6.5.9"
+  resolved "https://registry.yarnpkg.com/swiper/-/swiper-6.5.9.tgz#ed6caa8bd9fd44d314944210551ce297d4fb09c7"
+  integrity sha512-zO3UCLVEiOXZontAQWBNpWFZGV3WaXwHSgvng0qIGLVMyxYGD6w78S7YkGAu/XBam1SBQNZzxqfFc/LDjNdq/A==
   dependencies:
-    dom7 "^2.1.5"
-    ssr-window "^2.0.0"
+    dom7 "^3.0.0"
+    ssr-window "^3.0.0"
 
 table@^5.2.3:
   version "5.3.3"
