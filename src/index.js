@@ -1,7 +1,7 @@
 import { LitElement, html, css, unsafeCSS } from "lit-element";
 
-import Swiper from "swiper";
-import swiperStyle from "swiper/css/swiper.min.css";
+import Swiper from "swiper/swiper-bundle.esm.js";
+import swiperStyle from "swiper/swiper-bundle.css";
 import deepcopy from "deep-clone-simple";
 
 const HELPERS = window.loadCardHelpers ? window.loadCardHelpers() : undefined;
@@ -115,9 +115,7 @@ class SwipeCard extends LitElement {
           ? "rtl"
           : "ltr"}"
       >
-        <div class="swiper-wrapper">
-          ${this._cards}
-        </div>
+        <div class="swiper-wrapper">${this._cards}</div>
         ${"pagination" in this._parameters
           ? html` <div class="swiper-pagination"></div> `
           : ""}
@@ -143,9 +141,8 @@ class SwipeCard extends LitElement {
       if (this._parameters.pagination === null) {
         this._parameters.pagination = {};
       }
-      this._parameters.pagination.el = this.shadowRoot.querySelector(
-        ".swiper-pagination"
-      );
+      this._parameters.pagination.el =
+        this.shadowRoot.querySelector(".swiper-pagination");
     }
 
     if ("navigation" in this._parameters) {
@@ -164,9 +161,8 @@ class SwipeCard extends LitElement {
       if (this._parameters.scrollbar === null) {
         this._parameters.scrollbar = {};
       }
-      this._parameters.scrollbar.el = this.shadowRoot.querySelector(
-        ".swiper-scrollbar"
-      );
+      this._parameters.scrollbar.el =
+        this.shadowRoot.querySelector(".swiper-scrollbar");
     }
 
     if ("start_card" in this._config) {
@@ -268,7 +264,7 @@ class SwipeCard extends LitElement {
 
 customElements.define("swipe-card", SwipeCard);
 console.info(
-  "%c   SWIPE-CARD  \n%c Version 4.0.0 ",
+  "%c   SWIPE-CARD  \n%c Version 5.0.0 ",
   "color: orange; font-weight: bold; background: black",
   "color: white; font-weight: bold; background: dimgray"
 );
