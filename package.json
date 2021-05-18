@@ -26,7 +26,7 @@
   "dependencies": {
     "custom-card-helpers": "^1.7.0",
     "deep-clone-simple": "^1.1.1",
-    "lit-element": "next-major",
+    "lit": "^2.0.0-rc.2",
     "swiper": "^6.5.9"
   }
 }

@@ -1,4 +1,4 @@
-import { LitElement, html, css, unsafeCSS } from "lit-element";
+import { LitElement, html, css, unsafeCSS } from "lit";
 
 import Swiper from "swiper/swiper-bundle.esm.js";
 import swiperStyle from "swiper/swiper-bundle.css";
