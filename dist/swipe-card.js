@@ -9,7 +9,12 @@ const e=window.ShadowRoot&&(void 0===window.ShadyCSS||window.ShadyCSS.nativeShad
         dir="${this._hass.translationMetadata.translations[this._hass.selectedLanguage||this._hass.language].isRTL?"rtl":"ltr"}"
       >
         <div class="swiper-wrapper">${this._cards}</div>
-        ${"pagination"in this._parameters?D` <div class="swiper-pagination"></div> `:""}
+        ${"pagination"in this._parameters?this._config.pagination_style?D`
+                <div
+                  class="swiper-pagination"
+                  style="${this._config.pagination_style}"
+                ></div>
+              `:D` <div class="swiper-pagination"></div> `:""}
         ${"navigation"in this._parameters?D`
               <div class="swiper-button-next"></div>
               <div class="swiper-button-prev"></div>
