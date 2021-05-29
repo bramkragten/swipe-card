@@ -117,7 +117,14 @@ class SwipeCard extends LitElement {
       >
         <div class="swiper-wrapper">${this._cards}</div>
         ${"pagination" in this._parameters
-          ? html` <div class="swiper-pagination"></div> `
+          ? this._config.pagination_style
+            ? html`
+                <div
+                  class="swiper-pagination"
+                  style="${this._config.pagination_style}"
+                ></div>
+              `
+            : html` <div class="swiper-pagination"></div> `
           : ""}
         ${"navigation" in this._parameters
           ? html`
