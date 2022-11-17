@@ -44,5 +44,5 @@ And add a card with type `custom:swipe-card`:
 | ---- | ---- | ------- | ----------------- | ----------- |
 | `card_width` | string | | Any css option that fits in the `width` css value | Will force the width of the swiper container |
 | `start_card` | number | | Any number | The card being displayed at the beginning |
-| `parameters` | object | | Any parameter from [here](http://idangero.us/swiper/api/) | Configuration of the swiper |
+| `parameters` | object | | Any parameter from [here](https://swiperjs.com/swiper-api#parameters) | Configuration of the swiper |
 | `reset_after` | number | | Any number | Will reset the swiper to the `start_card` if defined or the first card after `reset_after` seconds |
