@@ -235,11 +235,23 @@ class SwipeCard extends LitElement {
     return element;
   }
 
-  async _rebuildCard(element, config) {
-    const newCard = await this._createCardElement(config);
-    element.replaceWith(newCard);
-    this._cards.splice(this._cards.indexOf(element), 1, newCard);
-    this._ro.observe(newCard);
+  async _rebuildCard(cardElToReplace, config) {
+    let newCardEl = this.createCardElement(config);
+    try {
+      newCardEl.hass = this.hass;
+    } catch (e) {
+      newCardEl = document.createElement("ha-alert");
+      newCardEl.alertType = "error";
+      newCardEl.innerText = e.message;
+    }
+    if (cardElToReplace.parentElement) {
+      cardElToReplace.parentElement.replaceChild(newCardEl, cardElToReplace);
+    }
+    this._cards = this._cards.map((curCardEl) =>
+      curCardEl === cardElToReplace ? newCardEl : curCardEl
+    );
+    this._ro.unobserve(cardElToReplace);
+    this._ro.observe(newCardEl);
     this.swiper.update();
   }
 
