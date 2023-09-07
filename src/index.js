@@ -1,6 +1,6 @@
 import { LitElement, html, css, unsafeCSS } from "lit";
 
-import Swiper from "swiper/swiper-bundle.esm.js";
+import Swiper from "swiper";
 import swiperStyle from "swiper/swiper-bundle.css";
 import deepcopy from "deep-clone-simple";
 
@@ -108,7 +108,7 @@ class SwipeCard extends LitElement {
 
     return html`
       <div
-        class="swiper-container"
+        class="swiper"
         dir="${this._hass.translationMetadata.translations[
           this._hass.selectedLanguage || this._hass.language
         ].isRTL || false
@@ -170,7 +170,7 @@ class SwipeCard extends LitElement {
     }
 
     this.swiper = new Swiper(
-      this.shadowRoot.querySelector(".swiper-container"),
+      this.shadowRoot.querySelector(".swiper"),
       this._parameters
     );
 
